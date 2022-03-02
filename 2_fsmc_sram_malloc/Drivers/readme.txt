@@ -1,0 +1,4 @@
+STM32Cube_FW_F4_V1.26.0:
+			CMSIS
+			STM32F4xx_HAL_Driver
+
