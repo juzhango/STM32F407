@@ -1,52 +1,23 @@
-# Prerequisites
-*.d
+# edit
+**/.vscode/
+*~
 
-# Object files
-*.o
-*.ko
-*.obj
-*.elf
+# prj
+**/*.uvgui*.*
 
-# Linker output
-*.ilk
-*.map
-*.exp
+# obj
+*.[oad]
+*.axf
+*.lnp
+*.crf
+*.dep
 
-# Precompiled Headers
-*.gch
-*.pch
+# lst
+*.lst
 
-# Libraries
-*.lib
-*.a
-*.la
-*.lo
+# j-link
+**/JLink*
+**/DebugConfig/
 
-# Shared objects (inc. Windows DLLs)
-*.dll
-*.so
-*.so.*
-*.dylib
 
-# Executables
-*.exe
-*.out
-*.app
-*.i*86
-*.x86_64
-*.hex
 
-# Debug files
-*.dSYM/
-*.su
-*.idb
-*.pdb
-
-# Kernel Module Compile Results
-*.mod*
-*.cmd
-.tmp_versions/
-modules.order
-Module.symvers
-Mkfile.old
-dkms.conf
