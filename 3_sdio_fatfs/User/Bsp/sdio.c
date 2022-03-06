@@ -75,7 +75,18 @@ void show_sdcard_info(void)
 	printf("LogBlockNbr:%d \r\n",(uint32_t)(SDCardInfo.LogBlockNbr));				
 	printf("LogBlockSize:%d \r\n",(uint32_t)(SDCardInfo.LogBlockSize));				
 	printf("Card Capacity:%d MB\r\n",(uint32_t)(CardCap>>20));						
- 	printf("Card BlockSize:%d\r\n\r\n",SDCardInfo.BlockSize);						
+ 	printf("Card BlockSize:%d\r\n\r\n",SDCardInfo.BlockSize);	
+	
+	printf("===========================\r\n\r\n");	
+	printf("SDCardInfo.BlockNbr:%d\r\n",SDCardInfo.BlockNbr);	
+	printf("SDCardInfo.BlockSize:%d\r\n",SDCardInfo.BlockSize);	
+	printf("SDCardInfo.CardType:%d\r\n",SDCardInfo.CardType);	
+	printf("SDCardInfo.CardVersion:%d\r\n",SDCardInfo.CardVersion);	
+	printf("SDCardInfo.Class:%d\r\n",SDCardInfo.Class);	
+	printf("SDCardInfo.LogBlockNbr:%d\r\n",SDCardInfo.LogBlockNbr);	
+	printf("SDCardInfo.LogBlockSize:%d\r\n",SDCardInfo.LogBlockSize);
+	printf("SDCardInfo.RelCardAdd:%d\r\n",SDCardInfo.RelCardAdd);
+	printf("===========================\r\n\r\n");	
 }
 
 
@@ -90,13 +101,27 @@ void show_sdcard_info(void)
  */
 uint8_t BSP_SD_ReadBlocks(uint32_t *pData, uint32_t ReadAddr, uint32_t NumOfBlocks, uint32_t Timeout)
 {
-    if (HAL_SD_ReadBlocks(&uSdHandle, (uint8_t *)pData, ReadAddr, NumOfBlocks, Timeout) != HAL_OK)
+	HAL_StatusTypeDef ret;
+	uint16_t	timeout=0xff;
+	
+	DISABLE_INT();
+	ret = HAL_SD_ReadBlocks(&uSdHandle, (uint8_t *)pData, ReadAddr, NumOfBlocks, Timeout);
+	while(HAL_SD_GetCardState(&uSdHandle) != HAL_SD_CARD_TRANSFER)
     {
-        return MSD_ERROR;
+		if(timeout-- == 0)
+		{	
+			return SD_TRANSFER_BUSY;
+		}
+    }
+	ENABLE_INT();
+	
+    if ( ret != HAL_OK)
+    {
+        return SD_TRANSFER_BUSY;
     }
     else
     {
-        return MSD_OK;
+        return SD_TRANSFER_OK;
     }
 }
 
@@ -110,16 +135,32 @@ uint8_t BSP_SD_ReadBlocks(uint32_t *pData, uint32_t ReadAddr, uint32_t NumOfBloc
  */
 uint8_t BSP_SD_WriteBlocks(uint32_t *pData, uint32_t WriteAddr, uint32_t NumOfBlocks, uint32_t Timeout)
 {
-    if (HAL_SD_WriteBlocks(&uSdHandle, (uint8_t *)pData, WriteAddr, NumOfBlocks, Timeout) != HAL_OK)
+	uint16_t	timeout=0xffff;
+	HAL_StatusTypeDef ret = HAL_OK;
+	DISABLE_INT();
+	
+	ret = HAL_SD_WriteBlocks(&uSdHandle, (uint8_t *)pData, WriteAddr, NumOfBlocks, Timeout) ;
+	
+	while(HAL_SD_GetCardState(&uSdHandle) != HAL_SD_CARD_TRANSFER)
     {
-        return MSD_ERROR;
+		if(timeout-- == 0)
+		{	
+			return SD_TRANSFER_BUSY;
+		}
+    }
+
+	ENABLE_INT();
+
+	if ( ret != HAL_OK)
+    {
+        return SD_TRANSFER_BUSY;
     }
     else
     {
-        return MSD_OK;
+        return SD_TRANSFER_OK;
     }
 }
-
+#if (SD_DMA_MODE==1) 
 /**
  * @brief  Reads block(s) from a specified address in an SD card, in DMA mode.
  * @param  pData: Pointer to the buffer that will contain the data to transmit
@@ -159,7 +200,7 @@ uint8_t BSP_SD_WriteBlocks_DMA(uint32_t *pData, uint32_t WriteAddr, uint32_t Num
         return MSD_OK;
     }
 }
-
+#endif
 /**
  * @brief  Erases the specified memory area of the given SD card.
  * @param  StartAddr: Start byte address

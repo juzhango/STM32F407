@@ -95,6 +95,11 @@
 
 #define PKout(n)   BIT_ADDR(GPIOK_ODR_Addr,n)  //输出 
 #define PKin(n)    BIT_ADDR(GPIOK_IDR_Addr,n)  //输入
+
+
+
+#define ENABLE_INT()	__set_PRIMASK(0)	
+#define DISABLE_INT()	__set_PRIMASK(1)	
 /* Exported functions ------------------------------------------------------- */
 
 #endif /* __BSP_H */

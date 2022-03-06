@@ -207,8 +207,8 @@ void HAL_SRAM_MspDeInit(SRAM_HandleTypeDef *hsram)
  */
 void HAL_SD_MspInit(SD_HandleTypeDef *hsd)
 {
-    static DMA_HandleTypeDef dmaRxHandle;
-    static DMA_HandleTypeDef dmaTxHandle;
+    DMA_HandleTypeDef dmaRxHandle;
+    DMA_HandleTypeDef dmaTxHandle;
     GPIO_InitTypeDef GPIO_Init_Structure;
 
     /* Enable SDIO clock */
@@ -229,13 +229,13 @@ void HAL_SD_MspInit(SD_HandleTypeDef *hsd)
 
     /* GPIOC configuration */
     GPIO_Init_Structure.Pin = GPIO_PIN_8 | GPIO_PIN_9 | GPIO_PIN_10 | GPIO_PIN_11 | GPIO_PIN_12;
-
     HAL_GPIO_Init(GPIOC, &GPIO_Init_Structure);
 
     /* GPIOD configuration */
     GPIO_Init_Structure.Pin = GPIO_PIN_2;
     HAL_GPIO_Init(GPIOD, &GPIO_Init_Structure);
 
+#if (SD_DMA_MODE==1) 
     /* NVIC configuration for SDIO interrupts */
     HAL_NVIC_SetPriority(SDIO_IRQn, 0x0E, 0);
     HAL_NVIC_EnableIRQ(SDIO_IRQn);
@@ -280,7 +280,7 @@ void HAL_SD_MspInit(SD_HandleTypeDef *hsd)
     dmaTxHandle.Init.PeriphBurst = DMA_PBURST_INC4;
 
     dmaTxHandle.Instance = SD_DMAx_Tx_STREAM;
-
+	
     /* Associate the DMA handle */
     __HAL_LINKDMA(hsd, hdmatx, dmaTxHandle);
 
@@ -297,5 +297,6 @@ void HAL_SD_MspInit(SD_HandleTypeDef *hsd)
     /* NVIC configuration for DMA transfer complete interrupt */
     HAL_NVIC_SetPriority(SD_DMAx_Tx_IRQn, 0x0F, 0);
     HAL_NVIC_EnableIRQ(SD_DMAx_Tx_IRQn);
+#endif	
 }
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

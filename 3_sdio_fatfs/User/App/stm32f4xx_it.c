@@ -36,6 +36,7 @@
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 extern TIM_HandleTypeDef    TimHandle;
+extern SD_HandleTypeDef uSdHandle;
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
 
@@ -158,6 +159,22 @@ void TIMx_IRQHandler(void)
   HAL_TIM_IRQHandler(&TimHandle);
 }
 
+void SDMMC1_IRQHandler(void)
+{
+    HAL_SD_IRQHandler(&uSdHandle);
+}
+
+
+void DMA2_Stream6_IRQHandler(void)
+{
+    HAL_DMA_IRQHandler(uSdHandle.hdmatx);
+}
+
+
+void DMA2_Stream3_IRQHandler(void)
+{
+    HAL_DMA_IRQHandler(uSdHandle.hdmarx);
+}
 
 /**
   * @brief  This function handles PPP interrupt request.

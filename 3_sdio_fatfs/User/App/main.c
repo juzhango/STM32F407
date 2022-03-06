@@ -17,6 +17,8 @@
 
 /* Private variables ---------------------------------------------------------*/
 
+uint16_t sd_size = 0;
+uint8_t a = 0;
 /* Private function prototypes -----------------------------------------------*/
 static void SystemClock_Config(void);
 static void Error_Handler(void);
@@ -30,7 +32,7 @@ static void Error_Handler(void);
 int main(void)
 {
 	uint8_t key;
-
+	uint8_t * buf;
 
 	/* STM32F4xx HAL library initialization:
 		  - Configure the Flash prefetch, instruction and Data caches
@@ -63,13 +65,60 @@ int main(void)
 	show_sdcard_info();
 
 	/* Infinite loop */
-
+	buf=u_malloc(0,1024);		//申请内存
+	memset(buf,a,1024);
+			//if(BSP_SD_WriteBlocks((uint32_t *)buf,0,2,SD_DATATIMEOUT)==0)	//读取0扇区的内容
+	BSP_SD_WriteBlocks_DMA((uint32_t *)buf,0,2);
+	u_free(0,buf);
 	while (1)
 	{
 		key = Key_Get();
 		if (key == KEY3_EVENT_DOWN)
 		{
-		
+			
+			printf("k3d\r\n");
+			
+			a--;
+			printf("a--:%d\r\n",a);
+		}
+		if (key == KEY2_EVENT_DOWN)
+		{
+			printf("k2d\r\n");
+				
+			buf=u_malloc(0,1024);		//申请内存
+			memset(buf,0xff,1024);
+			if(BSP_SD_ReadBlocks((uint32_t *)buf,0,2,SD_DATATIMEOUT)==0)	//读取0扇区的内容
+			{	
+				printf("read SECTOR 0 DATA:\r\n");
+				for(sd_size=0;sd_size<1024;sd_size++)printf("%x ",buf[sd_size]);//打印0扇区数据    	   
+				printf("\r\nDATA ENDED\r\n");
+				
+			}
+			u_free(0,buf);//释放内存
+		}
+		if (key == KEY1_EVENT_DOWN)
+		{
+			printf("k1d\r\n");
+			
+			buf=u_malloc(0,1024);		//申请内存
+			memset(buf,a,1024);
+			//if(BSP_SD_WriteBlocks((uint32_t *)buf,0,2,SD_DATATIMEOUT)==0)	//读取0扇区的内容
+			if(BSP_SD_WriteBlocks_DMA((uint32_t *)buf,0,2)==0)
+			{	
+				printf("write SECTOR 0 DATA:\r\n");
+				for(sd_size=0;sd_size<1024;sd_size++)printf("%x ",buf[sd_size]);//打印0扇区数据    	   
+				printf("\r\nDATA ENDED\r\n");
+				
+			}
+			u_free(0,buf);//释放内存
+			
+		}
+		if (key == KEY0_EVENT_DOWN)
+		{
+			printf("k0d\r\n");
+			
+			a++;
+			printf("a++:%d\r\n",a);
 		}
 	}
 }

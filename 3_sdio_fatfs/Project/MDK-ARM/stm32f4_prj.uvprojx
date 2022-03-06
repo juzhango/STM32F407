@@ -337,7 +337,7 @@
             <v6Rtti>0</v6Rtti>
             <VariousControls>
               <MiscControls></MiscControls>
-              <Define>STM32F407xx,STM32F407xx</Define>
+              <Define>STM32F407xx</Define>
               <Undefine></Undefine>
               <IncludePath>..\..\Drivers\CMSIS\Include;..\..\Drivers\CMSIS\Device\ST\STM32F4xx\Include;..\..\Drivers\STM32F4xx_HAL_Driver\Inc;..\..\User\App;..\..\User\Bsp</IncludePath>
             </VariousControls>

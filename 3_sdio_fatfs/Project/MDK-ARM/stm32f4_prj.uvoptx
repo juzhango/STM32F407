@@ -152,25 +152,9 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>18</LineNumber>
+          <LineNumber>43</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134218376</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>..\..\User\Bsp\sdio.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\stm32f4_prj\../../User/Bsp/sdio.c\18</Expression>
-        </Bp>
-        <Bp>
-          <Number>1</Number>
-          <Type>0</Type>
-          <LineNumber>41</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>134229324</Address>
+          <Address>134234584</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -179,12 +163,44 @@
           <BreakIfRCount>1</BreakIfRCount>
           <Filename>..\..\User\App\main.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\stm32f4_prj\../../User/App/main.c\41</Expression>
+          <Expression>\\stm32f4_prj\../../User/App/main.c\43</Expression>
+        </Bp>
+        <Bp>
+          <Number>1</Number>
+          <Type>0</Type>
+          <LineNumber>1365</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>134226050</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>1</BreakIfRCount>
+          <Filename>..\..\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_sd.c</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression>\\stm32f4_prj\../../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sd.c\1365</Expression>
         </Bp>
         <Bp>
           <Number>2</Number>
           <Type>0</Type>
-          <LineNumber>17</LineNumber>
+          <LineNumber>1290</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>134225848</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>1</BreakIfRCount>
+          <Filename>..\..\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_sd.c</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression>\\stm32f4_prj\../../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sd.c\1290</Expression>
+        </Bp>
+        <Bp>
+          <Number>3</Number>
+          <Type>0</Type>
+          <LineNumber>41</LineNumber>
           <EnabledFlag>1</EnabledFlag>
           <Address>0</Address>
           <ByteObject>0</ByteObject>
@@ -193,7 +209,7 @@
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>0</BreakIfRCount>
-          <Filename>..\..\User\Bsp\sdio.c</Filename>
+          <Filename>..\..\User\App\main.c</Filename>
           <ExecCommand></ExecCommand>
           <Expression></Expression>
         </Bp>
