@@ -1,8 +1,8 @@
 /*
  * @Author: luozw
  * @Date: 2022-01-05 13:50:59
- * @LastEditTime: 2022-01-08 09:51:00
- * @LastEditors: luozw
+ * @LastEditTime: 2022-03-10 23:55:54
+ * @LastEditors: Please set LastEditors
  * @Description:
  * @FilePath: \stm32-f407-explorer\2_fsms_sram_malloc\User\App\main.c
  * @version:
@@ -32,6 +32,8 @@ int main(void)
 	uint8_t key;
 	uint8_t *p;
 	uint16_t i;
+	uint16_t testWriteValue = 0;
+	uint16_t testReadValue = 0;
 
 	/* STM32F4xx HAL library initialization:
 		  - Configure the Flash prefetch, instruction and Data caches
@@ -83,6 +85,19 @@ int main(void)
 				}
 			}
 			u_free(SRAMEX, p);
+		}
+		if (key == KEY2_EVENT_DOWN)
+		{
+			printf("k2d\r\n");
+			testWriteValue = 600;
+			printf("FSMC_SRAM_WriteBuffer\r\n");
+			FSMC_SRAM_WriteBuffer(&testWriteValue, 0, 1);
+		}
+		if (key == KEY1_EVENT_DOWN)
+		{
+			printf("k1d\r\n");
+			FSMC_SRAM_ReadBuffer(&testReadValue, 0, 1);
+			printf("FSMC_SRAM_ReadBuffer:%d\r\n", testReadValue);
 		}
 	}
 }
