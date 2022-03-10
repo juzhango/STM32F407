@@ -160,47 +160,9 @@ uint8_t BSP_SD_WriteBlocks(uint32_t *pData, uint32_t WriteAddr, uint32_t NumOfBl
         return SD_TRANSFER_OK;
     }
 }
-#if (SD_DMA_MODE==1) 
-/**
- * @brief  Reads block(s) from a specified address in an SD card, in DMA mode.
- * @param  pData: Pointer to the buffer that will contain the data to transmit
- * @param  ReadAddr: Address from where data is to be read
- * @param  NumOfBlocks: Number of SD blocks to read
- * @retval SD status
- */
-uint8_t BSP_SD_ReadBlocks_DMA(uint32_t *pData, uint32_t ReadAddr, uint32_t NumOfBlocks)
-{
-    /* Read block(s) in DMA transfer mode */
-    if (HAL_SD_ReadBlocks_DMA(&uSdHandle, (uint8_t *)pData, ReadAddr, NumOfBlocks) != HAL_OK)
-    {
-        return MSD_ERROR;
-    }
-    else
-    {
-        return MSD_OK;
-    }
-}
 
-/**
- * @brief  Writes block(s) to a specified address in an SD card, in DMA mode.
- * @param  pData: Pointer to the buffer that will contain the data to transmit
- * @param  WriteAddr: Address from where data is to be written
- * @param  NumOfBlocks: Number of SD blocks to write
- * @retval SD status
- */
-uint8_t BSP_SD_WriteBlocks_DMA(uint32_t *pData, uint32_t WriteAddr, uint32_t NumOfBlocks)
-{
-    /* Write block(s) in DMA transfer mode */
-    if (HAL_SD_WriteBlocks_DMA(&uSdHandle, (uint8_t *)pData, WriteAddr, NumOfBlocks) != HAL_OK)
-    {
-        return MSD_ERROR;
-    }
-    else
-    {
-        return MSD_OK;
-    }
-}
-#endif
+
+
 /**
  * @brief  Erases the specified memory area of the given SD card.
  * @param  StartAddr: Start byte address
@@ -218,4 +180,60 @@ uint8_t BSP_SD_Erase(uint32_t StartAddr, uint32_t EndAddr)
         return MSD_OK;
     }
 }
+
+
+/**
+ * @brief  Reads block(s) from a specified address in an SD card, in DMA mode.
+ * @param  pData: Pointer to the buffer that will contain the data to transmit
+ * @param  ReadAddr: Address from where data is to be read
+ * @param  NumOfBlocks: Number of SD blocks to read
+ * @retval SD status
+ */
+//uint8_t BSP_SD_ReadBlocks_DMA(uint32_t *pData, uint32_t ReadAddr, uint32_t NumOfBlocks)
+//{
+//    /* Read block(s) in DMA transfer mode */
+//    if (HAL_SD_ReadBlocks_DMA(&uSdHandle, (uint8_t *)pData, ReadAddr, NumOfBlocks) != HAL_OK)
+//    {
+//        return MSD_ERROR;
+//    }
+//    else
+//    {
+//        return MSD_OK;
+//    }
+//}
+
+/**
+ * @brief  Writes block(s) to a specified address in an SD card, in DMA mode.
+ * @param  pData: Pointer to the buffer that will contain the data to transmit
+ * @param  WriteAddr: Address from where data is to be written
+ * @param  NumOfBlocks: Number of SD blocks to write
+ * @retval SD status
+ */
+//uint8_t BSP_SD_WriteBlocks_DMA(uint32_t *pData, uint32_t WriteAddr, uint32_t NumOfBlocks)
+//{
+//    /* Write block(s) in DMA transfer mode */
+//	uint16_t	timeout=0xff;
+//	HAL_StatusTypeDef ret = HAL_OK;
+//	
+//	ret = HAL_SD_WriteBlocks_DMA(&uSdHandle, (uint8_t *)pData, WriteAddr, NumOfBlocks);
+//	
+//	while(HAL_SD_GetCardState(&uSdHandle) != HAL_SD_CARD_TRANSFER)
+//    {
+//		printf("dma w status:%d\r\n",HAL_SD_GetCardState(&uSdHandle));
+//		if(timeout-- == 0)
+//		{	
+//			return SD_TRANSFER_BUSY;
+//		}
+//    }
+//	
+//    if ( ret != HAL_OK)
+//    {
+//        return SD_TRANSFER_BUSY;
+//    }
+//    else
+//    {
+//        return SD_TRANSFER_OK;
+//    }
+//}
+
 
