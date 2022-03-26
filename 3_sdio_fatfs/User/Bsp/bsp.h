@@ -1,8 +1,8 @@
 /*
  * @Author: luozw
  * @Date: 2022-01-05 14:33:23
- * @LastEditTime: 2022-01-06 20:00:09
- * @LastEditors: luozw
+ * @LastEditTime: 2022-03-26 12:05:33
+ * @LastEditors: Please set LastEditors
  * @Description: 
  * @FilePath: \stm32-f407-explorer\2_fsms_sram_malloc\User\Bsp\bsp.h
  * @version:  
@@ -27,6 +27,10 @@
 #include "sdio.h"
 
 #include "u_malloc.h"
+
+#include "ff.h"
+
+
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
 /* Exported macro ------------------------------------------------------------*/

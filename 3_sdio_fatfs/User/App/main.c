@@ -1,8 +1,8 @@
 /*
  * @Author: luozw
  * @Date: 2022-01-05 13:50:59
- * @LastEditTime: 2022-01-08 09:51:00
- * @LastEditors: luozw
+ * @LastEditTime: 2022-03-26 16:16:56
+ * @LastEditors: Please set LastEditors
  * @Description:
  * @FilePath: \stm32-f407-explorer\2_fsms_sram_malloc\User\App\main.c
  * @version:
@@ -16,13 +16,118 @@
 /* Private macro -------------------------------------------------------------*/
 
 /* Private variables ---------------------------------------------------------*/
-volatile uint8_t sdioFlag = 0;
 uint16_t sd_size = 0;
 uint8_t a = 0;
+
+FATFS fs;					 /* FatFs文件系统对象 */
+FIL fnew;					 /* 文件对象 */
+FRESULT res_sd;				 /* 文件操作结果 */
+UINT fnum;					 /* 文件成功读写数量 */
+BYTE ReadBuffer[1024] = {0}; /* 读缓冲区 */
+BYTE WriteBuffer[] =		 /* 写缓冲区*/
+	"abcdefghijklmnopqrstuvwxyz1234567890~!@#$%^&*()_+";
+
 /* Private function prototypes -----------------------------------------------*/
 static void SystemClock_Config(void);
 static void Error_Handler(void);
 /* Private functions ---------------------------------------------------------*/
+
+void FATFS_Test()
+{
+	
+	BYTE work[FF_MAX_SS]; /* Work area (larger is better for processing time) */
+	printf("fs size:%d,fnew size:%d\r\n",sizeof(fs),sizeof(fnew));
+	printf("\r\n****** this is sd card fatfs test ******\r\n");
+
+	//在外部SPI Flash挂载文件系统，文件系统挂载时会对SPI设备初始化
+	res_sd = f_mount(&fs, "0:", 1);
+
+	/*----------------------- 格式化测试 ---------------------------*/
+	/* 如果没有文件系统就格式化创建创建文件系统 */
+	if (res_sd == FR_NO_FILESYSTEM)
+	{
+		printf("> SD card no fs will be format\r\n");
+		/* 格式化 */
+		printf("f_mkfs s\r\n");
+		res_sd = f_mkfs("0", NULL, work, sizeof(work)); //格式化
+		printf("f_mkfs e\r\n");
+		if (res_sd == FR_OK)
+		{
+			printf(">SDcard format ok\r\n");
+			/* 格式化后，先取消挂载 */
+			res_sd = f_mount(NULL, "0:", 1);
+			/* 重新挂载	*/
+			res_sd = f_mount(&fs, "0:", 1);
+		}
+		else
+		{
+			printf("<< sd card format err >>\r\n");
+			while (1)
+				;
+		}
+	}
+	else if (res_sd != FR_OK)
+	{
+		printf("!! sd card f_mount err(%d)\r\n", res_sd);
+		printf("!! maybe init no ok \r\n");
+		while (1)
+			;
+	}
+	else
+	{
+		printf("> fs fmount ok , can be read write test\r\n");
+	}
+	
+		/*----------------------- 文件系统测试：写测试 -----------------------------*/
+	/* 打开文件，如果文件不存在则创建它 */
+	printf("\r\n****** wii be wrete test... ******\r\n");	
+	res_sd = f_open(&fnew, "0:wstest.txt",FA_CREATE_ALWAYS | FA_WRITE );
+	if ( res_sd == FR_OK )
+	{
+		printf("> open/creat FatFs rwtest.txt ok, write data\r\n");
+		/* 将指定存储区内容写入到文件内 */
+		res_sd=f_write(&fnew,WriteBuffer,sizeof(WriteBuffer),&fnum);
+		if(res_sd==FR_OK)
+		{
+			printf("> write ok , data num: %d\n",fnum);
+			printf(">  date is:\r\n%s\r\n",WriteBuffer);
+		}
+		else
+		{
+			printf("!! file wreti error(%d)\n",res_sd);
+		}    
+		/* 不再读写，关闭文件 */
+		f_close(&fnew);
+	}
+	else
+	{	
+		printf("!! open/creat file error \r\n");
+	}
+	
+/*------------------- 文件系统测试：读测试 ------------------------------------*/
+	printf("****** will be read test... ******\r\n");
+	res_sd = f_open(&fnew, "0:wstest.txt", FA_OPEN_EXISTING | FA_READ); 	 
+	if(res_sd == FR_OK)
+	{
+		printf("> open file ok\r\n");
+		res_sd = f_read(&fnew, ReadBuffer, sizeof(ReadBuffer), &fnum); 
+		if(res_sd==FR_OK)
+		{
+			printf("> file read ok, read byte num:%d\r\n",fnum);
+			printf("> read data is:\r\n%s \r\n", ReadBuffer);	
+		}
+		else
+		{
+		  printf("!! file read error(%d)\n",res_sd);
+		}		
+	}
+	else
+	{
+		printf("!! open file error\r\n");
+	}
+	/* 不再读写，关闭文件 */
+	f_close(&fnew);	
+}
 
 /**
  * @brief  Main program
@@ -56,23 +161,16 @@ int main(void)
 	mallco_dev.init(SRAMIN);
 	mallco_dev.init(SRAMEX);
 
-	while (BSP_SD_Init() != MSD_OK)
-	{
-		printf("sd init ko!\r\n");
-		HAL_Delay(1000);
-	}
-	printf("sd init ok!\r\n");
-	show_sdcard_info();
+	BSP_SD_Init();
+	//FATFS_Test();
+
+	//while (1)
+		;
 
 	/* Infinite loop */
 
 	while (1)
 	{
-		if(sdioFlag)
-		{
-			sdioFlag = 0;
-			printf("sdio int\r\n");
-		}
 		key = Key_Get();
 		if (key == KEY3_EVENT_DOWN)
 		{
@@ -103,7 +201,7 @@ int main(void)
 
 			buf = u_malloc(0, 1024); //申请内存
 			memset(buf, a, 1024);
-			if(BSP_SD_WriteBlocks((uint32_t *)buf,0,2,SD_DATATIMEOUT)==0)	//读取0扇区的内容
+			if (BSP_SD_WriteBlocks((uint32_t *)buf, 0, 2, SD_DATATIMEOUT) == 0) //读取0扇区的内容
 			{
 				printf("write SECTOR 0 DATA:\r\n");
 				for (sd_size = 0; sd_size < 1024; sd_size++)

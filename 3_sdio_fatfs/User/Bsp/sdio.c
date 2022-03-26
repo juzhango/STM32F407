@@ -45,6 +45,7 @@ uint8_t BSP_SD_Init(void)
             SD_state = MSD_OK;
         }
     }
+	show_sdcard_info();
 
     return SD_state;
 }
@@ -57,36 +58,36 @@ void show_sdcard_info(void)
 
 	HAL_SD_GetCardCID(&uSdHandle,&SDCard_CID);	
 	HAL_SD_GetCardInfo(&uSdHandle,&SDCardInfo);					
-	switch(SDCardInfo.CardType)
-	{
-		case CARD_SDSC:
-		{
-			if(SDCardInfo.CardVersion == CARD_V1_X)
-				printf("Card Type:SDSC V1\r\n");
-			else if(SDCardInfo.CardVersion == CARD_V2_X)
-				printf("Card Type:SDSC V2\r\n");
-		}
-		break;
-		case CARD_SDHC_SDXC:printf("Card Type:SDHC\r\n");break;
-	}	
-	CardCap=(uint64_t)(SDCardInfo.LogBlockNbr)*(uint64_t)(SDCardInfo.LogBlockSize);
-  	printf("Card ManufacturerID:%d\r\n",SDCard_CID.ManufacturerID);					
- 	printf("Card RCA:%d\r\n",SDCardInfo.RelCardAdd);								
-	printf("LogBlockNbr:%d \r\n",(uint32_t)(SDCardInfo.LogBlockNbr));				
-	printf("LogBlockSize:%d \r\n",(uint32_t)(SDCardInfo.LogBlockSize));				
-	printf("Card Capacity:%d MB\r\n",(uint32_t)(CardCap>>20));						
- 	printf("Card BlockSize:%d\r\n\r\n",SDCardInfo.BlockSize);	
+	// switch(SDCardInfo.CardType)
+	// {
+	// 	case CARD_SDSC:
+	// 	{
+	// 		if(SDCardInfo.CardVersion == CARD_V1_X)
+	// 			printf("Card Type:SDSC V1\r\n");
+	// 		else if(SDCardInfo.CardVersion == CARD_V2_X)
+	// 			printf("Card Type:SDSC V2\r\n");
+	// 	}
+	// 	break;
+	// 	case CARD_SDHC_SDXC:printf("Card Type:SDHC\r\n");break;
+	// }	
+	// CardCap=(uint64_t)(SDCardInfo.LogBlockNbr)*(uint64_t)(SDCardInfo.LogBlockSize);
+  	// printf("Card ManufacturerID:%d\r\n",SDCard_CID.ManufacturerID);					
+ 	// printf("Card RCA:%d\r\n",SDCardInfo.RelCardAdd);								
+	// printf("LogBlockNbr:%d \r\n",(uint32_t)(SDCardInfo.LogBlockNbr));				
+	// printf("LogBlockSize:%d \r\n",(uint32_t)(SDCardInfo.LogBlockSize));				
+	// printf("Card Capacity:%d MB\r\n",(uint32_t)(CardCap>>20));						
+ 	// printf("Card BlockSize:%d\r\n\r\n",SDCardInfo.BlockSize);	
 	
-	printf("===========================\r\n\r\n");	
-	printf("SDCardInfo.BlockNbr:%d\r\n",SDCardInfo.BlockNbr);	
-	printf("SDCardInfo.BlockSize:%d\r\n",SDCardInfo.BlockSize);	
-	printf("SDCardInfo.CardType:%d\r\n",SDCardInfo.CardType);	
-	printf("SDCardInfo.CardVersion:%d\r\n",SDCardInfo.CardVersion);	
-	printf("SDCardInfo.Class:%d\r\n",SDCardInfo.Class);	
-	printf("SDCardInfo.LogBlockNbr:%d\r\n",SDCardInfo.LogBlockNbr);	
-	printf("SDCardInfo.LogBlockSize:%d\r\n",SDCardInfo.LogBlockSize);
-	printf("SDCardInfo.RelCardAdd:%d\r\n",SDCardInfo.RelCardAdd);
-	printf("===========================\r\n\r\n");	
+	// printf("===========================\r\n\r\n");	
+	// printf("SDCardInfo.BlockNbr:%d\r\n",SDCardInfo.BlockNbr);	
+	// printf("SDCardInfo.BlockSize:%d\r\n",SDCardInfo.BlockSize);	
+	// printf("SDCardInfo.CardType:%d\r\n",SDCardInfo.CardType);	
+	// printf("SDCardInfo.CardVersion:%d\r\n",SDCardInfo.CardVersion);	
+	// printf("SDCardInfo.Class:%d\r\n",SDCardInfo.Class);	
+	// printf("SDCardInfo.LogBlockNbr:%d\r\n",SDCardInfo.LogBlockNbr);	
+	// printf("SDCardInfo.LogBlockSize:%d\r\n",SDCardInfo.LogBlockSize);
+	// printf("SDCardInfo.RelCardAdd:%d\r\n",SDCardInfo.RelCardAdd);
+	// printf("===========================\r\n\r\n");	
 }
 
 
